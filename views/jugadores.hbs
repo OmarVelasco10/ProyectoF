@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <title>Jugadores</title>
+</head>
+<body class="jugadoresFondo"> 
+     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Torneo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                 <a class="nav-link " href="/torneo/equipos">Equipos</a>
+                </li>
+                <li class="nav-item">
+                 <a class="nav-link active" href="/torneo/jugadores">Jugadores</a>
+                </li>
+            </ul>
+            <span class="navbar-text">
+                <a href="/logout" class="nav-link">Cerrar Sesión</a> 
+            </span>
+        </div>
+    </div>
+  </nav>
+    <div class="container">
+        <div style="float: right;">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Agrega un Jugador
+            </button>
+        </div>
+            <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Nacionalidad</th>
+                <th scope="col">Equipo</th>
+                <th scope="col">Acciones</th>
+
+            </tr>
+        </thead>
+        <tbody>
+             {{#each jugadores}}
+            <tr>
+            <td>{{id}}</td>
+            <td>{{nombre}}</td>
+            <td>{{nacionalidad}}</td>
+            <td>{{equipo}}</td>
+            <td>
+                    <a href="/torneo/jugadores/deletejugador/{{ id }}" type="button" class="btn btn-danger">Eliminar</a>
+                    <button onclick=" editarJugador('{{this.nombre}}','{{this.nacionalidad}}','{{this.id_equipos}}' , '{{this.id}}') " class="btn btn-primary">Editar</button>
+                </td>
+            </tr>
+            {{/each}}
+    
+        </tbody>
+        </table>
+    </div>
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Agrega un jugador</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        <div class="modal-body">
+                                <form action="/torneo/jugadores/addJugador" method="post">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" name="nombre" id="nombre" placeholder="nombre">
+
+                                    </div>
+                                    <div class="input-group mb-3 ">
+                                        <input type="text" class="form-control" name="nacionalidad" id="nacionalidad" placeholder="nacionalidad">
+
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <input type="number" class="form-control" name="id_equipos" id="id_equipos" placeholder="id_equipos">
+                                    </div>
+                                    
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Guadar jugador</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+        </div>  
+        <div class="modal fade" id="editarJugadorNew" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agrega un equipo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/torneo/jugadores/updatejugador" method="post">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="nombre_new" id="nombre_new" placeholder="nombre">
+                    </div>
+                    <div class="input-group mb-3 ">
+                         <input type="text" class="form-control" name="nacionalidad_new" id="nacionalidad_new" placeholder="nacionalidad">
+                    </div>
+                    <div class="input-group mb-3">
+                         <input type="text" class="form-control" name="id_equipos_new" id="id_equipos_new" placeholder="id_equipos">
+                    </div>
+                    <input type="hidden" name="id_jugador" id="id_jugador">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Guardar jugador</button>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>    
+    
+</body>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    function editarJugador(nombre,nacionalidad,id_equipos,id)
+    {
+        document.getElementById('nombre_new').value = nombre
+        document.getElementById('nacionalidad_new').value= nacionalidad
+        document.getElementById('id_equipos_new').value= id_equipos
+        document.getElementById('id_jugador').value= id
+
+        $('#editarJugadorNew').modal('show');
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+</html>
